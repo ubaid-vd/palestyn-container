@@ -1,2 +1,2 @@
-# palestyn-core
-Core project to execute the undertow runtime with all jaxrs &amp; cdi plumbing
+# palestyn-container
+Container project to execute the container (default undertow) with all jaxrs (resteasy) &amp; cdi (weld) plumbing
