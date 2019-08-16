@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 
+import javax.enterprise.inject.spi.CDI;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.Persistence;
@@ -13,6 +14,7 @@ import org.jboss.resteasy.core.ResteasyDeploymentImpl;
 import org.jboss.resteasy.plugins.server.undertow.UndertowJaxrsServer;
 import org.jboss.resteasy.spi.ResteasyDeployment;
 import org.jboss.weld.environment.servlet.Listener;
+import org.palestyn.events.ApplicationStarted;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,7 @@ import io.undertow.Undertow;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
+import io.undertow.servlet.api.DeploymentManager.State;
 
 public class Bootstrap {
 
@@ -50,7 +53,7 @@ public class Bootstrap {
 		this.BIND_HOST = containerProperties.getProperty("service.host").orElse("localhost");
 		this.BIND_PORT = new Integer(containerProperties.getProperty("service.port").orElse("8080"));
 	}
-	
+
 	private void boot() {
 		
 		String contextPath = containerProperties.getProperty("application.context.path").orElse("/");
@@ -85,8 +88,11 @@ public class Bootstrap {
 		
 		DeploymentManager deploymentManager = server.getManager();
 		logger.info("~~~ DEPLOYMENT {}", deploymentManager.getState());		
-		
+
 		logger.info("~~~ READY TO SERVE");
+
+		if(deploymentManager.getState()==State.STARTED)
+			CDI.current().select(Container.class).get().resume();
 	}
 
 	private void setUpPersistenceContext() {

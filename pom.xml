@@ -14,7 +14,14 @@
 	</properties>
 
 	<dependencies>
-
+	
+		<!-- palestyn-apis -->
+		<dependency>
+			<groupId>palestyn</groupId>
+			<artifactId>palestyn-apis</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
 		<!-- resteasy -->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>

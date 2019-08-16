@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+
+import org.palestyn.events.ApplicationStarted;
+
 public class Container {
 
 	static class Properties {
@@ -27,5 +32,13 @@ public class Container {
 			
 			return value;
 		}	
+	}
+
+	@Inject
+	Event<ApplicationStarted> applicationStartedEvent;
+	
+	// resume startup process of container in CDI environment
+	public void resume() {
+		applicationStartedEvent.fire(new ApplicationStarted());
 	}	
 }
